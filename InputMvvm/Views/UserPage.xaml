@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InputMvvm.Views.UserPage"
+             xmlns:vm="clr-namespace:InputMvvm.ViewModels"
+             Title="{Binding Title}">
+    
+    <ContentPage.BindingContext>
+        <vm:UserViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <ScrollView Grid.Row="1">
+            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+                <Label Text="CentralReach Sample App" FontSize="Title"/>
+                <Label Text="This app allows for saving some basic user data into a SQLite database. This UserPage allows for entering data with some basic validation." FontSize="12" Padding="0,0,0,0"/>
+
+                <Label Text="Please enter a unique Username" FontSize="16" Padding="0,24,0,0"/>
+                <Entry Text="{Binding Username}"/>
+                <Label Text="{Binding ErrorUsernameMessage}" IsVisible="{Binding IsErrorUsername}" TextColor="Red" FontSize="16" Padding="0,24,0,0"/>
+               
+                <Label Text="Please enter your cat's name" FontSize="16" Padding="0,24,0,0"/>
+                <Entry Text="{Binding Catname}" />
+                <Label Text="{Binding ErrorCatnameMessage}" IsVisible="{Binding IsErrorCatname}" TextColor="Red" FontSize="16" Padding="0,24,0,0"/>
+                
+                <Label Text="Please enter your dog's name" FontSize="16" Padding="0,24,0,0"/>
+                <Entry Text="{Binding Dogname}" />
+                <Label Text="{Binding ErrorDognameMessage}" IsVisible="{Binding IsErrorDogname}" TextColor="Red" FontSize="16" Padding="0,24,0,0"/>
+                
+                <Grid 
+                    ColumnDefinitions="50*, 50*"
+                    ColumnSpacing="8" 
+                    HorizontalOptions="FillAndExpand">
+
+                    <Button Grid.Column="0" Margin="0,10,0,0" Text="Save"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="Green"
+                        TextColor="Black" />
+
+                    <Button Grid.Column="1" Margin="0,10,0,0" Text="Clear"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="red"
+                        TextColor="Black" />
+                </Grid>
+
+                <Label Text="The following information has been entered" IsVisible="{Binding IsVisible}" FontSize="16" Padding="0,24,0,0"/>
+                <Label Text="{Binding SuccessUsernameMessage}" IsVisible="{Binding IsVisible}" FontSize="16" Padding="0,24,0,0"/>
+                <Label Text="{Binding SuccessCatnameMessage}" IsVisible="{Binding IsVisible}" FontSize="16" Padding="0,24,0,0"/>
+                <Label Text="{Binding SuccessDognameMessage}" IsVisible="{Binding IsVisible}" FontSize="16" Padding="0,24,0,0"/>
+
+            </StackLayout>
+            
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
