@@ -33,6 +33,16 @@ namespace InputMvvm.Services
         public async Task AddUser(string username, string catname, string dogname)
         {
             await Init();
+
+            if (string.IsNullOrEmpty(username))
+                throw new Exception("Username is required");
+            
+            if (string.IsNullOrEmpty(catname))
+                throw new Exception("Catname is required");
+
+            if (string.IsNullOrEmpty(dogname))
+                throw new Exception("Dogname is required");
+
             var user = new User
             {
                 Username = username,
@@ -40,7 +50,15 @@ namespace InputMvvm.Services
                 Dogname = dogname
             };
 
-            await db.InsertAsync(user);
+            try
+            {
+                await db.InsertAsync(user);
+            }
+            catch (Exception ex)
+            {
+                var Message = string.Format("Failed to add {0}. Error: {1}", username, ex.Message);
+            }
+            
         }
 
         public async Task RemoveUser(int id)
@@ -50,23 +68,24 @@ namespace InputMvvm.Services
             await db.DeleteAsync<User>(id);
         }
 
-        //public async Task GetUser(string username)
-        //{
-        //    await Init();
-
-        //    var query = db.Table<User>().Where(u => u.Username.Equals(username));
-
-        //    await query.FirstOrDefaultAsync();
-        //}
-
-        public async Task<User> GetUser(string username)
+        public async Task<int> GetUserCount(string username)
         {
-            var user = from u in db.Table<User>()
-                        where u.Username.Equals(username)
-                        select u;
+            await Init();
 
-            return await user.FirstOrDefaultAsync();
-            
+            var user = from u in db.Table<User>()
+                       where u.Username.Equals(username)
+                       select u;
+
+            try
+            {
+                return await user.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                var Message = string.Format("Failed to add {0}. Error: {1}", username, ex.Message);
+            }
+
+            return 0;
         }
 
         public async Task<IEnumerable<User>> GetUsers()

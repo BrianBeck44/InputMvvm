@@ -67,20 +67,20 @@ namespace InputMvvm.ViewModels
             ValidateCatname();
             ValidateDogname();
 
-            // check for duplicate username
-            // Task<User> user = userService.GetUser(Username);
+            var getUserCount = await userService.GetUserCount(Username);
 
-            //if (user.AsyncState != null)
-            //{
-            //    // duplicate
-            //    IsErrorUsername = true;
-            //    ErrorUsernameMessage = "Username must be unique. Username is already being used";
-            //    return;
-            //}
+            if (getUserCount > 0)
+            {
+                //there is already a user with this username
+                IsErrorUsername = true;
+                ErrorUsernameMessage = "Username already exists.  Please choose unique username";
+                return;
+
+            }
 
             if (!IsErrorUsername && !IsErrorCatname && !IsErrorDogname)
             {
-                // await userService.AddUser(Username, Catname, Dogname);
+                await userService.AddUser(Username, Catname, Dogname);
 
                 SuccessUsernameMessage = "Username: " + Username;
                 SuccessCatnameMessage = "Cat's name:" + Catname;
